@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <script>
+        function fetchPosts() {
+            fetch('/api/posts')
+                .then(response => response.json())
+                .then(data => {
+                    const postsList = document.getElementById('postsList');
+                    postsList.innerHTML = '';
+                    data.forEach(post => {
+                        postsList.innerHTML += `
+                            <div>
+                                <h3>${post.title}</h3>
+                                <p>${post.content}</p>
+                                <p>작성자: ${post.authorEmail}</p>
+                                <button onclick="editPost(${post.id})">수정</button>
+                                <button onclick="deletePost(${post.id})">삭제</button>
+                            </div>
+                        `;
+                    });
+                });
+        }
+
+        function editPost(id) {
+            fetch(`/api/posts/${id}`)
+                .then(response => response.json())
+                .then(post => {
+                    document.getElementById('postId').value = post.id;
+                    document.getElementById('title').value = post.title;
+                    document.getElementById('content').value = post.content;
+                    document.getElementById('authorEmail').value = post.authorEmail;
+                });
+        }
+
+        function savePost() {
+            const id = document.getElementById('postId').value;
+            const post = {
+                title: document.getElementById('title').value,
+                content: document.getElementById('content').value,
+                authorEmail: document.getElementById('authorEmail').value
+            };
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `/api/posts/${id}` : '/api/posts';
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(post)
+            })
+                .then(response => response.json())
+                .then(() => fetchPosts())
+                .catch(error => console.error('Error:', error));
+        }
+
+        function deletePost(id) {
+            fetch(`/api/posts/${id}`, {
+                method: 'DELETE'
+            })
+                .then(() => fetchPosts())
+                .catch(error => console.error('Error:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchPosts);
+    </script>
+</head>
+<body>
+    <h1>게시판</h1>
+    <div id="postsList"></div>
+    <h2>게시물 수정</h2>
+    <input type="hidden" id="postId">
+    <input type="text" id="title" placeholder="제목">
+    <textarea id="content" placeholder="내용"></textarea>
+    <input type="email" id="authorEmail" placeholder="작성자 이메일">
+    <button onclick="savePost()">저장</button>
+</body>
+</html>
+
