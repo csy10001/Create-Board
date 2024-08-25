@@ -20,8 +20,8 @@ public class PostService {
     }
 
     // 게시물 ID로 조회
-    public Optional<Post> findPostById(Long id) {
-        return postRepository.findById(id);
+    public Optional<Post> findPostById(Integer post_id) {
+        return postRepository.findById(post_id);
     }
 
     // 게시물 생성
@@ -30,21 +30,21 @@ public class PostService {
     }
 
     // 게시물 업데이트
-    public Post updatePost(Long id, Post updatedPost) {
-        return postRepository.findById(id)
+    public Post updatePost(Integer post_id, Post updatedPost) {
+        return postRepository.findById(post_id)
                 .map(post -> {
                     post.setTitle(updatedPost.getTitle());
                     post.setContent(updatedPost.getContent());
                     post.setAuthorEmail(updatedPost.getAuthorEmail());
                     return postRepository.save(post);
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + post_id));
     }
 
     // 게시물 삭제
-    public boolean deletePost(Long id) {
-        if (postRepository.existsById(id)) {
-            postRepository.deleteById(id);
+    public boolean deletePost(Integer post_id) {
+        if (postRepository.existsById(post_id)) {
+            postRepository.deleteById(post_id);
             return true;
         }
         return false;

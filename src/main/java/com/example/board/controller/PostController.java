@@ -25,10 +25,10 @@ public class PostController {
 
     // 게시물 ID로 조회
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
-        return postService.findPostById(id)
+    public ResponseEntity<Post> getPostById(@PathVariable Integer post_id) {
+        return postService.findPostById(post_id)
                 .map(post -> ResponseEntity.ok(post))
-                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + post_id));
     }
 
     // 게시물 생성
@@ -40,9 +40,9 @@ public class PostController {
 
     // 게시물 업데이트
     @PutMapping("/{id}")
-    public ResponseEntity<Post> updatePost(@PathVariable Long id, @RequestBody Post post) {
+    public ResponseEntity<Post> updatePost(@PathVariable Integer post_id, @RequestBody Post post) {
         try {
-            Post updatedPost = postService.updatePost(id, post);
+            Post updatedPost = postService.updatePost(post_id, post);
             return ResponseEntity.ok(updatedPost);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build(); // 404 Not Found
@@ -51,8 +51,8 @@ public class PostController {
 
     // 게시물 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
-        if (postService.deletePost(id)) {
+    public ResponseEntity<Void> deletePost(@PathVariable Integer post_id) {
+        if (postService.deletePost(post_id)) {
             return ResponseEntity.noContent().build(); // 204 No Content
         } else {
             return ResponseEntity.notFound().build(); // 404 Not Found
