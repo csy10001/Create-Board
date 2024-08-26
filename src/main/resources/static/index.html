@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>게시판</h1>
+
+    <!-- 게시물 작성 폼 -->
+    <div class="form-container">
+        <h2>새 게시물 작성</h2>
+        <form id="postForm">
+            <input type="text" id="title" placeholder="제목" required>
+            <textarea id="content" placeholder="내용" required></textarea>
+            <input type="email" id="authorEmail" placeholder="작성자 이메일" required>
+            <button type="submit">게시물 작성</button>
+        </form>
+    </div>
+
+    <!-- 게시물 목록 -->
+    <div id="posts-container">
+        <h2>게시물 목록</h2>
+        <div id="posts">
+            <!-- 게시물 목록이 여기에 동적으로 추가됩니다 -->
+        </div>
+    </div>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
+
